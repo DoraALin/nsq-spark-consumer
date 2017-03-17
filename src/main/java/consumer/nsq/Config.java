@@ -16,32 +16,20 @@
  * limitations under the License.
  */
 
-package consumer.kafka;
+/*
+ *   This file is based on the source code of the Kafka spout of the Apache Storm project.
+ *   (https://github.com/apache/storm/tree/master/external/storm-kafka)
+ *   This file has been modified to work with Spark Streaming.
+ */
+
+package consumer.nsq;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 @SuppressWarnings("serial")
-public abstract class KafkaMessageHandler<E> implements Cloneable, Serializable {
+public class Config extends HashMap<String, Object> implements Serializable {
 
-    public void init() {
-        // do nothing for default implementation
-    }
-
-    public MessageAndMetadata<E> handle(long offset, Partition partition, String topic, String consumer, byte[] payload) throws Exception {
-        E msg = process(payload);
-        MessageAndMetadata<E> m = new MessageAndMetadata<>();
-        m.setConsumer(consumer);
-        m.setOffset(offset);
-        m.setPartition(partition);
-        m.setPayload(msg);
-        m.setTopic(topic);
-        return m;
-    }
-
-    protected abstract E process(byte[] payload);
-
-    @Override
-    public Object clone() throws CloneNotSupportedException {
-        return (KafkaMessageHandler) super.clone();
-    }
+  public static final String NSQ_CONSUMER_TOPIC = "nsq.topic";
+  public static final String NSQ_CONSUMER_NAME = "nsq.topic.channel";
 }
